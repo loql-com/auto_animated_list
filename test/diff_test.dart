@@ -1,4 +1,4 @@
-import 'package:animated_list_plus/animated_list_plus.dart';
+import 'package:auto_animated_list/auto_animated_list.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // ignore_for_file: avoid_print

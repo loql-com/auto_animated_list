@@ -14,10 +14,6 @@ Click [here](https://github.com/wwwdata/implicitly_animated_reorderable_list/blo
 
 Add it to your `pubspec.yaml` file:
 
-```yaml
-dependencies:
-  animated_list_plus: ^0.4.3
-```
 
 Install packages from the command line
 

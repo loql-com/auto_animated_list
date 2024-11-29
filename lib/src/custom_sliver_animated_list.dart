@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 const Duration _kDuration = Duration(milliseconds: 300);
 
@@ -15,6 +16,11 @@ class CustomSliverAnimatedList extends StatefulWidget {
     required this.itemBuilder,
     this.initialItemCount = 0,
     this.delegateBuilder,
+    required this.listController,
+    required this.extentEstimation,
+    required this.extentPrecalculationPolicy,
+    required this.delayPopulatingCacheArea,
+    required this.layoutKeptAliveChildren,
   })  : assert(initialItemCount >= 0),
         super(key: key);
 
@@ -38,6 +44,42 @@ class CustomSliverAnimatedList extends StatefulWidget {
 
   /// Builds the delegate to use for the list view.
   final DelegateBuilder? delegateBuilder;
+
+  /// When set provides access to extents of individual children.
+  /// [ListController] can also be used to jump to a specific item in the list.
+  final ListController? listController;
+
+  /// Optional method that can be used to override default estimated extent for
+  /// each item. Initially all extents are estimated and then as the items are laid
+  /// out, either through scrolling or [extentPrecalculationPolicy], the actual
+  /// extents are calculated and the scroll offset is adjusted to account for
+  /// the difference between estimated and actual extents.
+  ///
+  /// The item index argument is nullable. If all estimated items have same extent,
+  /// the implementation should return non-zero extent for the `null` index. This saves
+  /// calls to extent estimation provider for large lists.
+  /// If each item has different extent, return zero for the `null` index.
+  final ExtentEstimationProvider? extentEstimation;
+
+  /// Optional policy that can be used to asynchronously precalculate the extents
+  /// of the items in the list. This can be useful allow precise scrolling on small
+  /// lists where the difference between estimated and actual extents may be noticeable
+  /// when interacting with the scrollbar. For larger lists precalculating extent
+  /// has diminishing benefits since the error for each item does not impact the
+  /// overall scroll position as much.
+  final ExtentPrecalculationPolicy? extentPrecalculationPolicy;
+
+  /// Whether the items in cache area should be built delayed.
+  /// This is an optimization that kicks in during fast scrolling, when
+  /// all items are being replaced on every frame.
+  /// With [delayPopulatingCacheArea] set to `true`, the items in cache area
+  /// are only built after the scrolling slows down.
+  final bool delayPopulatingCacheArea;
+
+  /// Whether children with keepAlive should be laid out.
+  /// Setting this to `true` ensures that layout for kept alive children is
+  /// maintained and proper paint transform is applied.
+  final bool layoutKeptAliveChildren;
 
   @override
   CustomSliverAnimatedListState createState() =>
@@ -280,7 +322,12 @@ class CustomSliverAnimatedListState extends State<CustomSliverAnimatedList>
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
+    return SuperSliverList(
+      listController: widget.listController,
+      layoutKeptAliveChildren: widget.layoutKeptAliveChildren,
+      delayPopulatingCacheArea: widget.delayPopulatingCacheArea,
+      extentEstimation: widget.extentEstimation,
+      extentPrecalculationPolicy: widget.extentPrecalculationPolicy,
       delegate: _createDelegate(),
     );
   }
