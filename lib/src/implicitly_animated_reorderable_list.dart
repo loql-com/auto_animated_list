@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:animated_list_plus/src/custom_sliver_animated_list.dart';
-import 'package:animated_list_plus/src/util/sliver_child_separated_builder_delegate.dart';
+import 'package:auto_animated_list/src/custom_sliver_animated_list.dart';
+import 'package:auto_animated_list/src/util/sliver_child_separated_builder_delegate.dart';
 import 'package:flutter/material.dart' hide AnimatedItemBuilder;
 
 import 'src.dart';
@@ -179,6 +179,11 @@ class ImplicitlyAnimatedReorderableList<E extends Object>
     required this.onReorderFinished,
     this.header,
     this.footer,
+    super.listController,
+    super.delayPopulatingCacheArea = true,
+    super.layoutKeptAliveChildren = false,
+    super.extentEstimation,
+    super.extentPrecalculationPolicy,
   })  : liftDuration = liftDuration ?? reorderDuration,
         settleDuration = settleDuration ?? liftDuration ?? reorderDuration,
         assert(
@@ -251,6 +256,11 @@ class ImplicitlyAnimatedReorderableList<E extends Object>
     required this.onReorderFinished,
     this.header,
     this.footer,
+    super.listController,
+    super.delayPopulatingCacheArea = true,
+    super.layoutKeptAliveChildren = false,
+    super.extentEstimation,
+    super.extentPrecalculationPolicy,
   })  : liftDuration = liftDuration ?? reorderDuration,
         settleDuration = settleDuration ?? liftDuration ?? reorderDuration,
         assert(
@@ -812,6 +822,11 @@ class ImplicitlyAnimatedReorderableListState<E extends Object>
               }
             },
             delegateBuilder: widget.delegateBuilder,
+            delayPopulatingCacheArea: widget.delayPopulatingCacheArea,
+            layoutKeptAliveChildren: widget.layoutKeptAliveChildren,
+            extentEstimation: widget.extentEstimation,
+            extentPrecalculationPolicy: widget.extentPrecalculationPolicy,
+            listController: widget.listController,
           ),
         ),
         if (hasFooter)

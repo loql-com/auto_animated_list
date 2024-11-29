@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
 
-import 'package:animated_list_plus/animated_list_plus.dart';
+import 'package:auto_animated_list/auto_animated_list.dart';
 
 class Item {
   Item(this.id, this.value);
